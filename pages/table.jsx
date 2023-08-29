@@ -25,6 +25,18 @@ const Table = () => {
 
     const newEntry = { ...inputData };
 
+    const handleRemove = (index) => {
+      const newData = [...data];
+      newData.splice(index, 1);
+      setData(newData);
+    };
+
+    const handleEdit = (index) => {
+      const itemToEdit = data[index];
+      setInputData(itemToEdit);
+      handleRemove(index);
+    };
+
 
     setData([...data, newEntry]);
 
@@ -51,6 +63,7 @@ const Table = () => {
                 <th className="border p-2 text-black">No Whatsapp</th>
                 <th className="border p-2 text-black">Alamat</th>
                 <th className="border p-2 text-black">Password</th>
+                <th className="border p-2 text-black">Action</th>
               </tr>
             </thead>
             {data.length > 0 ? (
@@ -63,6 +76,20 @@ const Table = () => {
                     <td className="border p-2 text-black">{item.whatsapp}</td>
                     <td className="border p-2 text-black">{item.alamat}</td>
                     <td className="border p-2 text-black">{item.password}</td>
+                    <td className="border p-2  text-black">
+                      <button
+                        className="text-blue-500 hover:underline mr-2"
+                        onClick={() => handleEdit(index)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="text-red-500 hover:underline"
+                        onClick={() => handleRemove(index)}
+                      >
+                        Remove
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
