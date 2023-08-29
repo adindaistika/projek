@@ -25,19 +25,6 @@ const Table = () => {
 
     const newEntry = { ...inputData };
 
-    const handleRemove = (index) => {
-      const newData = [...data];
-      newData.splice(index, 1);
-      setData(newData);
-    };
-
-    const handleEdit = (index) => {
-      const itemToEdit = data[index];
-      setInputData(itemToEdit);
-      handleRemove(index);
-    };
-
-
     setData([...data, newEntry]);
 
     setInputData({
@@ -50,10 +37,28 @@ const Table = () => {
     });
   };
 
+  const handleRemove = (index) => {
+    const newData = [...data];
+    newData.splice(index, 1);
+    setData(newData);
+  };
+
+  const handleEdit = (index) => {
+    setInputData({
+      idMitra: data[index].idMitra,
+      nama: data[index].nama,
+      email: data[index].email,
+      whatsapp: data[index].whatsapp,
+      alamat: data[index].alamat,
+      password: data[index].password,
+    });
+    console.log(inputData);
+  };
+
   return (
     <div className="md:flex">
       <section className="md:w-1/2 grid place-items-center bg-gradient-to-tr from-pink-300 to-blue-300 bg-sky-500 h-screen w-full">
-        <div className="bg-white p-8 w-full">
+        <div className="bg-white p-8 w-full overflow-auto">
           <table className="border-collapse w-full">
             <thead>
               <tr>
@@ -112,6 +117,7 @@ const Table = () => {
                 name='idMitra'
                 id='IdMitra'
                 onChange={handleInputChange}
+                value={inputData.idMitra}
               />
             </label>
             <label className="flex my-2 flex-col gap-1 text-xs w-full">
@@ -124,6 +130,7 @@ const Table = () => {
                 name='nama'
                 id='Nama'
                 onChange={handleInputChange}
+                value={inputData.nama}
               />
             </label>
           </div>
@@ -138,6 +145,7 @@ const Table = () => {
                 name='email'
                 id='Email'
                 onChange={handleInputChange}
+                value={inputData.email}
               />
             </label>
             <label className="flex my-2 flex-col gap-1 text-xs w-full">
@@ -150,6 +158,7 @@ const Table = () => {
                 name='whatsapp'
                 id='No Whatsapp'
                 onChange={handleInputChange}
+                value={inputData.whatsapp}
               />
             </label>
           </div>
@@ -164,6 +173,7 @@ const Table = () => {
               cols="30"
               rows="2"
               onChange={handleInputChange}
+              value={inputData.alamat}
             ></textarea>
           </label>
           <div className="md:flex gap-3 w-full">
@@ -177,6 +187,7 @@ const Table = () => {
                 name='password'
                 id='password'
                 onChange={handleInputChange}
+                value={inputData.password}
               />
             </label>
             <label className="flex my-2 flex-col gap-1 text-xs w-full">
@@ -189,6 +200,7 @@ const Table = () => {
                 name='konfirmasipassword'
                 id='konfirmasipassword'
                 onChange={handleInputChange}
+
               />
             </label>
           </div>
