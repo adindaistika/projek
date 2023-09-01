@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import Button from "@/components/Button";
+import { useForm } from 'react-hook-form';
 
 const Table = () => {
-  const [data, setData] = useState([]);
-  const [inputData, setInputData] = useState({
-    idMitra: "",
-    nama: "",
-    email: "",
-    whatsapp: "",
-    alamat: "",
-    password: "",
-  });
+  const [dataArray, setDataArray] = useState([]);
+  const { register, handleSubmit, errors, setValue } = useForm();
+  //const [inputData, setInputData] = useState({
+  //   idMitra: "",
+  //   nama: "",
+  //   email: "",
+  //   whatsapp: "",
+  //   alamat: "",
+  //   password: "",
+  // });
+  const [edit, setEdit] = useState(false);
+  const [idEdit, setIdEdit] = useState(null);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -20,21 +24,20 @@ const Table = () => {
     }));
   };
 
-  const submit = (event) => {
-    event.preventDefault();
+  const submit = (data) => {
+    // event.preventDefault();
+    dataArray.push(data);
+    console.log(dataArray)
 
-    const newEntry = { ...inputData };
+    // setInputData({
+    //   idMitra: "",
+    //   nama: "",
+    //   email: "",
+    //   whatsapp: "",
+    //   alamat: "",
+    //   password: "",
+    // });
 
-    setData([...data, newEntry]);
-
-    setInputData({
-      idMitra: "",
-      nama: "",
-      email: "",
-      whatsapp: "",
-      alamat: "",
-      password: "",
-    });
   };
 
   const handleRemove = (index) => {
@@ -44,6 +47,8 @@ const Table = () => {
   };
 
   const handleEdit = (index) => {
+    setEdit(true);
+    setIdEdit(index);
     setInputData({
       idMitra: data[index].idMitra,
       nama: data[index].nama,
@@ -53,6 +58,26 @@ const Table = () => {
       password: data[index].password,
     });
     console.log(inputData);
+  };
+
+  const submitEdit = (e) => {
+    e.preventDefault();
+    const newData = {
+
+    };
+    const oldData = [...data];
+    oldData[idEdit] = newData;
+    setData(oldData);
+    setInputData({
+      idMitra: "",
+      nama: "",
+      email: "",
+      whatsapp: "",
+      alamat: "",
+      password: "",
+    });
+    setEdit(false);
+    setIdEdit(null);
   };
 
   return (
@@ -71,9 +96,9 @@ const Table = () => {
                 <th className="border p-2 text-black">Action</th>
               </tr>
             </thead>
-            {data.length > 0 ? (
+            {dataArray.length > 0 ? (
               <tbody>
-                {data.map((item, index) => (
+                {dataArray.map((item, index) => (
                   <tr key={index}>
                     <td className="border p-2 text-black">{item.idMitra}</td>
                     <td className="border p-2 text-black">{item.nama}</td>
@@ -101,79 +126,73 @@ const Table = () => {
             ) : null}
           </table>
         </div>
-
       </section>
       <section className="p-5 md:w-1/2 bg-white">
         <h1 className="font-bold mb-3 text-lg text-black">DAFTAR AKUN</h1>
-        <form onSubmit={submit}>
+        <form onSubmit={handleSubmit(edit ? submitEdit : submit)}>
           <div className="md:flex gap-3 w-full">
             <label className="flex my-2 flex-col gap-1 text-xs w-full">
               <span className="text-xs text-black">Id Mitra</span>
               <input
                 className="p-3 w-full rounded-md outline-none border border-slate-900 text-black"
-                type='text'
+                type="text"
                 required
-                placeholder='Masukan Id Mitra'
-                name='idMitra'
-                id='IdMitra'
-                onChange={handleInputChange}
-                value={inputData.idMitra}
+                placeholder="Masukan Id Mitra"
+                name="idMitra"
+                id="IdMitra"
+                {...register('IdMitra')}
               />
             </label>
             <label className="flex my-2 flex-col gap-1 text-xs w-full">
               <span className="text-xs text-black">Nama</span>
               <input
                 className="p-3 w-full rounded-md outline-none border border-slate-900 text-black"
-                type='text'
+                type="text"
                 required
-                placeholder='Masukan Id Nama'
-                name='nama'
-                id='Nama'
-                onChange={handleInputChange}
-                value={inputData.nama}
+                placeholder="Masukan Id Nama"
+                name="nama"
+                id="Nama"
+                {...register('Nama')}
               />
             </label>
           </div>
           <div className="md:flex gap-3 w-full">
-            <label className="flex my-2 flex-col gap-1 text-xs w-full" >
+            <label className="flex my-2 flex-col gap-1 text-xs w-full">
               <span className="text-xs text-black">Email</span>
               <input
                 className="p-3 w-full rounded-md outline-none border border-slate-900 text-black"
-                type='email'
+                type="email"
                 required
-                placeholder='Masukan Email'
-                name='email'
-                id='Email'
-                onChange={handleInputChange}
-                value={inputData.email}
+                placeholder="Masukan Email"
+                name="email"
+                id="Email"
+                {...register('Email')}
               />
             </label>
             <label className="flex my-2 flex-col gap-1 text-xs w-full">
               <span className="text-xs text-black">No Whatsapp</span>
               <input
                 className="p-3 w-full rounded-md outline-none border border-slate-900 text-black"
-                type='text'
+                type="text"
                 required
-                placeholder='Masukan No Whatsapp'
-                name='whatsapp'
-                id='No Whatsapp'
-                onChange={handleInputChange}
-                value={inputData.whatsapp}
+                placeholder="Masukan No Whatsapp"
+                name="whatsapp"
+                id="No Whatsapp"
+                {...register('Whatsapp')}
               />
             </label>
           </div>
-          <label className="flex my-2 flex-col gap-1 text-xs w-full" >
+          <label className="flex my-2 flex-col gap-1 text-xs w-full">
             <span className="text-xs text-black">Alamat Lengkap</span>
             <textarea
               className="p-3 w-full rounded-md outline-none border border-slate-900 text-black"
               name={"alamat"}
               required
               id={"alamatlengkap"}
-              placeholder='Masukan Alamat lengkap'
+              placeholder="Masukan Alamat lengkap"
               cols="30"
               rows="2"
-              onChange={handleInputChange}
-              value={inputData.alamat}
+              {...register('Alamat')}
             ></textarea>
           </label>
           <div className="md:flex gap-3 w-full">
@@ -181,36 +200,40 @@ const Table = () => {
               <span className="text-xs text-black">Password</span>
               <input
                 className="p-3 w-full rounded-md outline-none border border-slate-900 text-black"
-                type='password'
+                type="password"
                 required
-                placeholder='Masukan password'
-                name='password'
-                id='password'
-                onChange={handleInputChange}
-                value={inputData.password}
+                placeholder="Masukan password"
+                name="password"
+                id="password"
+                {...register('Password')}
               />
             </label>
             <label className="flex my-2 flex-col gap-1 text-xs w-full">
               <span className="text-xs text-black">Konfirmasi Password</span>
               <input
                 className="p-3 w-full rounded-md outline-none border border-slate-900 text-black"
-                type='password'
+                type="password"
                 required
-                placeholder='Konfirmasi password'
-                name='konfirmasipassword'
-                id='konfirmasipassword'
-                onChange={handleInputChange}
-
+                placeholder="Konfirmasi password"
+                name="konfirmasipassword"
+                id="konfirmasipassword"
+                {...register('Konfirmasi Password')}
               />
             </label>
           </div>
           <label
             className="text-xs flex items-center gap-2 my-2 text-black"
-            htmlFor="check" >
+            htmlFor="check"
+          >
             <input type="checkbox" name="check" id="check" />
-            <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde asperiores ex voluptatem placeat quo consectetur nobis quam commodi odit ad! Distinctio libero veritatis temporibus, voluptas fuga ipsum quasi voluptatem dolorum.</span>
+            <span>
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde
+              asperiores ex voluptatem placeat quo consectetur nobis quam
+              commodi odit ad! Distinctio libero veritatis temporibus, voluptas
+              fuga ipsum quasi voluptatem dolorum.
+            </span>
           </label>
-          <Button type="submit">Buat Akun</Button>
+          <Button type="submit">{edit ? "Edit Akun" : "Buat Akun"}</Button>
         </form>
       </section>
     </div>
